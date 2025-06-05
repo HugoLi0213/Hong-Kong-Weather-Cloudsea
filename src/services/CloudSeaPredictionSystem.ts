@@ -8,7 +8,11 @@ export class CloudSeaPredictionSystem {
 
   async predictCloudSeaWithHKOData(location: string = '大帽山'): Promise<any> {
     try {
-      const weatherData = await this.hkoService.processWeatherDataForCloudSea(location);
+      // HKOWeatherService.processWeatherDataForCloudSea() 不接受參數，先取得所有地點資料
+      const weatherMap = await this.hkoService.processWeatherDataForCloudSea();
+      // 取指定地點的天氣資料
+      const weatherData = weatherMap[location];
+      if (!weatherData) throw new Error(`${location}數據暫缺`);
       const analysis = this.analyzeCloudSeaConditions(weatherData);
       analysis.recommendation += ` (數據來源: 香港天文台，更新時間: ${weatherData.updateTime})`;
       return analysis;

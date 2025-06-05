@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { HK_DISTRICTS } from '../data/locations';
-import { Location } from '../types';
 
 interface GeolocationState {
   position: GeolocationPosition | null;
   error: GeolocationPositionError | null;
   loading: boolean;
-  nearestLocation: Location | null;
+  nearestLocation: any | null;
 }
 
 interface UseGeolocationOptions {
@@ -50,7 +49,7 @@ export const useEnhancedGeolocation = (options: UseGeolocationOptions = {}) => {
   }, []);
 
   // Find nearest location based on coordinates
-  const findNearestLocation = useCallback((latitude: number, longitude: number): Location | null => {
+  const findNearestLocation = useCallback((latitude: number, longitude: number): any | null => {
     if (!HK_DISTRICTS.length) return null;
 
     let nearestLocation = HK_DISTRICTS[0];
