@@ -58,8 +58,8 @@ export class ErrorBoundary extends Component<Props, State> {
               We encountered an unexpected error. Please try refreshing the page.
             </p>
             
-            {/* @ts-ignore */}
-            {(import.meta as any).env.MODE === 'development' && this.state.error && (
+            {/* Development mode error details */}
+            {typeof window !== 'undefined' && window.location.hostname === 'localhost' && this.state.error && (
               <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 mb-6 text-left">
                 <h3 className="text-sm font-medium text-red-800 dark:text-red-300 mb-2">
                   Error Details:

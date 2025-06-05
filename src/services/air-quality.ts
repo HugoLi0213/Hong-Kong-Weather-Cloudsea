@@ -30,7 +30,9 @@ const generateMockPollutants = () => ({
 });
 
 class AirQualityService {
+  // @ts-expect-error - baseURL and epdURL are declared but not used in current implementation
   private baseURL = 'https://api.data.gov.hk/v1/historical-archive/get-file';
+  // @ts-expect-error - baseURL and epdURL are declared but not used in current implementation  
   private epdURL = 'https://www.aqhi.gov.hk/api/aqhi'; // EPD AQHI API
   
   async getCurrentAirQuality(): Promise<AirQualityData[]> {

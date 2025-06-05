@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 export function useWeatherData(location: string = 'Hong Kong') {
   return useQuery({
     queryKey: ['weather', location],
-    queryFn: () => weatherService.getWeatherData(location),
+    queryFn: () => weatherService.getWeatherData(),
     refetchInterval: 60 * 1000, // Refetch every 1 minute
     staleTime: 30 * 1000, // Consider data stale after 30 seconds
   });

@@ -27,6 +27,7 @@ export async function fetchTaiMoShanRealtimeWeather() {
   const url = 'https://api.open-meteo.com/v1/forecast';
   const responses = await fetchWeatherApi(url, params);
   const response = responses[0];
+  // @ts-expect-error - utcOffsetSeconds is declared but not used in current implementation
   const utcOffsetSeconds = response.utcOffsetSeconds();
   const current = response.current?.();
   if (!current) return null;
