@@ -2,8 +2,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React, { useEffect, useRef } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
-import { getAQHIColor, getAQHILevel } from '../../lib/utils';
-import { AirQualityData, Location } from '../../types';
+import { getAQHILevel } from '../../lib/utils';
+import { AirQualityData, HKDistrict } from '../../types';
 
 // Fix for default markers in react-leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -15,20 +15,20 @@ L.Icon.Default.mergeOptions({
 
 interface AirQualityMapProps {
   data: AirQualityData[];
-  locations: Location[];
+  locations: HKDistrict[];
   selectedLocation?: string;
   onLocationSelect?: (locationId: string) => void;
 }
 
 // Custom marker component
 const AirQualityMarker: React.FC<{
-  location: Location;
+  location: HKDistrict;
   data?: AirQualityData;
   isSelected: boolean;
   onClick: () => void;
 }> = ({ location, data, isSelected, onClick }) => {
-  const aqhi = data?.current.aqhi || 0;
-  const color = getAQHIColor(aqhi);
+  const aqhi = data?.aqhi || 0;
+  const color = getAQHILevel(aqhi);
   
   const customIcon = L.divIcon({
     className: `custom-div-icon ${isSelected ? 'selected' : ''}`,
@@ -81,16 +81,16 @@ const AirQualityMarker: React.FC<{
             {data && (
               <>
                 <div className="text-xs text-gray-600">
-                  PM2.5: {data.current.pm25} μg/m³
+                  PM2.5: {data.pollutants.pm25} μg/m³
                 </div>
                 <div className="text-xs text-gray-600">
-                  PM10: {data.current.pm10} μg/m³
+                  PM10: {data.pollutants.pm10} μg/m³
                 </div>
                 <div className="text-xs text-gray-600">
-                  NO2: {data.current.no2} μg/m³
+                  NO2: {data.pollutants.no2} μg/m³
                 </div>
                 <div className="text-xs text-gray-600">
-                  O3: {data.current.o3} μg/m³
+                  O3: {data.pollutants.o3} μg/m³
                 </div>
               </>
             )}
@@ -146,7 +146,7 @@ export const AirQualityMap: React.FC<AirQualityMapProps> = ({
         <MapController center={mapCenter} />
         
         {locations.map((location) => {
-          const locationData = data.find(d => d.location === location.id);
+          const locationData = data.find(d => d.station === location.id);
           return (
             <AirQualityMarker
               key={location.id}

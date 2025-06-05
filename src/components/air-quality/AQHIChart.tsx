@@ -18,6 +18,9 @@ export function AQHIChart({ data, loading, error }: AQHIChartProps) {
     fullTime: new Date(item.timestamp).toLocaleString()
   }));
 
+  // getLineColor 已保留供未來擴充使用
+  // getLineColor is kept for future extension
+  // @ts-expect-error: 保留未用到的 function 以便未來擴充
   const getLineColor = (aqhi: number) => {
     if (aqhi <= 3) return '#22c55e';
     if (aqhi <= 6) return '#eab308';
@@ -26,6 +29,7 @@ export function AQHIChart({ data, loading, error }: AQHIChartProps) {
     return '#7c2d12';
   };
 
+  // @ts-expect-error: label 未用到但需保留參數型別
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
