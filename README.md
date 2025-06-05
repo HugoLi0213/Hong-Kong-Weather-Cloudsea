@@ -43,17 +43,16 @@ This is a modern, ad-free weather and cloudsea forecast site for Hong Kong, inte
 
 ### 本地開發環境 Setup a Development Environment locally
 
-1. 安裝 Node.js 與 yarn / Install Node.js and yarn
+1. 安裝 Node.js / Install Node.js
    - https://nodejs.org
-   - npm install -g yarn
 2. 安裝依賴 / Install dependencies
-   - yarn install
+   - npm install
 3. 啟動開發伺服器 / Start the app
-   - yarn start
+   - npm run dev
    - 預設網址 http://localhost:5173
 
 ### 建立正式版 Build the app
-- yarn build
+- npm run build
 - 產出於 dist/ 目錄，可直接部署。
 
 ### Docker
