@@ -1,0 +1,36 @@
+/* Dashboard web 專用明亮樣式，修正藍底白字問題 */
+.chartContainer {
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.25);
+  background: #f5f5f5;
+}
+
+.footerText {
+  color: #222;
+}
+
+.footer a {
+  color: #2563eb;
+}
+
+select {
+  color: #222;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 4px 8px;
+  font-size: 16px;
+}
+
+h1, span {
+  color: #222;
+}
+
+body, .min-h-screen, .bg-white {
+  background: #f5f5f5 !important;
+  color: #222 !important;
+}

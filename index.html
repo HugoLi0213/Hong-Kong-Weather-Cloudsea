@@ -1,34 +1,35 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/hk-flag.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Comprehensive Hong Kong Weather and Air Quality Dashboard - Real-time AQHI, weather forecasts, and health recommendations" />
-    <meta name="keywords" content="Hong Kong, weather, air quality, AQHI, EPD, HKO, typhoon, health" />
-    <meta name="theme-color" content="#dc2626" />
-    <link rel="manifest" href="/manifest.json" />
-    <title>HK Weather & Air Quality Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="香港天氣及空氣質素 - Apple Weather 風格" />
+    <meta name="theme-color" content="#3a7bd5" />
+    <title>Apple Weather 風格天氣</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', system-ui, sans-serif;
+        background: linear-gradient(180deg, #3a7bd5 0%, #00d2ff 100%);
+        min-height: 100vh;
+        color: #fff;
+        -webkit-tap-highlight-color: transparent;
+      }
+      #root {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      // Register service worker for PWA
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log('SW registered: ', registration);
-            })
-            .catch((registrationError) => {
-              console.log('SW registration failed: ', registrationError);
-            });
-        });
-      }
-    </script>
   </body>
 </html>

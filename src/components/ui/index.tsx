@@ -40,22 +40,18 @@ export function DashboardCard({
   icon,
 }: DashboardCardProps) {
   return (
-    <div className={cn('card weather-card w-full max-w-full sm:max-w-md mx-auto', className)}>
-      <div className="card-header">
-        <div className="flex items-center gap-2">
-          {icon}
-          <h3 className="card-title text-lg">{title}</h3>
-        </div>
+    <div className={cn('bg-white/90 backdrop-blur-md shadow-xl rounded-2xl p-4 mb-4 w-full max-w-md mx-auto flex flex-col gap-2', className)}>
+      <div className="flex items-center gap-2 mb-2">
+        {icon}
+        <h3 className="text-lg font-bold text-hk-red tracking-wide">{title}</h3>
       </div>
-      <div className="card-content">
+      <div>
         {loading ? (
           <LoadingSkeleton lines={3} />
         ) : error ? (
           <div className="text-red-500 text-sm">
             <p>⚠️ {error}</p>
-            <p className="text-xs mt-1 text-gray-500">
-              Please try refreshing the page
-            </p>
+            <p className="text-xs mt-1 text-gray-500">請重新整理頁面</p>
           </div>
         ) : (
           children
@@ -111,25 +107,21 @@ export function StatCard({
   };
 
   return (
-    <div className={cn('bg-white dark:bg-gray-800 rounded-lg p-4 border', className)}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {icon}
-          <span className="text-sm text-gray-600 dark:text-gray-400">{label}</span>
+    <div className={cn('flex flex-col items-center justify-center bg-white/80 rounded-xl shadow p-3 min-w-[90px] min-h-[70px] transition-all', className)}>
+      <div className="flex items-center gap-1 mb-1">
+        {icon}
+        <span className="text-xs text-gray-500">{label}</span>
+      </div>
+      <span className="text-xl font-bold text-hk-red">
+        {value}
+        {unit && <span className="text-base text-gray-400 ml-1">{unit}</span>}
+      </span>
+      {trend && trendValue && (
+        <div className={cn('flex items-center gap-1 text-xs', getTrendColor())}>
+          <span>{getTrendIcon()}</span>
+          <span>{trendValue}</span>
         </div>
-        {trend && trendValue && (
-          <div className={cn('flex items-center gap-1 text-xs', getTrendColor())}>
-            <span>{getTrendIcon()}</span>
-            <span>{trendValue}</span>
-          </div>
-        )}
-      </div>
-      <div className="mt-2">
-        <span className="text-2xl font-bold">
-          {value}
-          {unit && <span className="text-lg text-gray-500 ml-1">{unit}</span>}
-        </span>
-      </div>
+      )}
     </div>
   );
 }

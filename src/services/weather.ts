@@ -1,174 +1,71 @@
 import { WeatherAlert, WeatherAPIResponse, WeatherData, WeatherForecast } from '@/types';
-
-// Mock data for development - replace with actual API calls
-const mockWeatherData: WeatherData = {
-  location: 'Hong Kong',
-  temperature: 28,
-  condition: 'Partly Cloudy',
-  humidity: 75,
-  windSpeed: 15,
-  windDirection: 'E',
-  uvIndex: 6,
-  visibility: 10,
-  pressure: 1013,
-  icon: '🌤️',
-  lastUpdated: new Date().toISOString()
-};
-
-const mockForecast: WeatherForecast[] = [
-  {
-    date: new Date().toISOString(),
-    high: 30,
-    low: 25,
-    condition: 'Partly Cloudy',
-    icon: '🌤️',
-    precipitation: 20,
-    humidity: 75,
-    windSpeed: 15
-  },
-  {
-    date: new Date(Date.now() + 86400000).toISOString(),
-    high: 32,
-    low: 27,
-    condition: 'Sunny',
-    icon: '☀️',
-    precipitation: 0,
-    humidity: 65,
-    windSpeed: 12
-  },
-  {
-    date: new Date(Date.now() + 172800000).toISOString(),
-    high: 29,
-    low: 24,
-    condition: 'Thunderstorms',
-    icon: '⛈️',
-    precipitation: 80,
-    humidity: 85,
-    windSpeed: 20
-  },
-  {
-    date: new Date(Date.now() + 259200000).toISOString(),
-    high: 26,
-    low: 22,
-    condition: 'Rainy',
-    icon: '🌧️',
-    precipitation: 90,
-    humidity: 90,
-    windSpeed: 18
-  },
-  {
-    date: new Date(Date.now() + 345600000).toISOString(),
-    high: 28,
-    low: 23,
-    condition: 'Cloudy',
-    icon: '☁️',
-    precipitation: 30,
-    humidity: 80,
-    windSpeed: 14
-  }
-];
-
-const mockAlerts: WeatherAlert[] = [];
+import axios from 'axios';
 
 class WeatherService {
-  private baseURL = 'https://api.hko.gov.hk/v1'; // Hong Kong Observatory API
-  
-  async getCurrentWeather(location: string = 'Hong Kong'): Promise<WeatherData> {
-    try {
-      // In a real implementation, you would call the HKO API
-      // const response = await axios.get(`${this.baseURL}/weather/rhrread`);
-      
-      // For now, return mock data with some variation
-      const variation = Math.random() * 5 - 2.5; // ±2.5 degrees
-      return {
-        ...mockWeatherData,
-        temperature: Math.round(mockWeatherData.temperature + variation),
-        lastUpdated: new Date().toISOString()
-      };
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
-      throw new Error('Failed to fetch weather data');
-    }
+  async getCurrentWeather(): Promise<WeatherData> {
+    // 使用 Open-Meteo API 取得香港天氣
+    const latitude = 22.3193;
+    const longitude = 114.1694;
+    const timezone = 'Asia/Hong_Kong';
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=temperature_2m,relative_humidity_2m,rain&timezone=${timezone}&forecast_days=1`;
+    const res = await axios.get(url);
+    const data = res.data;
+    // 取 current_weather
+    const current = data.current_weather || {};
+    return {
+      location: '香港',
+      temperature: Number(current.temperature),
+      condition: 'N/A', // Open-Meteo 無 condition 字串
+      humidity: data.hourly?.relative_humidity_2m?.[0] ?? 0,
+      windSpeed: Number(current.windspeed) || 0,
+      windDirection: String(current.winddirection) || '',
+      uvIndex: 0, // Open-Meteo 免費版無 UV
+      visibility: 0, // 無
+      pressure: 0, // 無
+      icon: '🌤️',
+      lastUpdated: current.time || new Date().toISOString(),
+    };
   }
 
-  async getWeatherForecast(location: string = 'Hong Kong'): Promise<WeatherForecast[]> {
-    try {
-      // In a real implementation, you would call the HKO API
-      // const response = await axios.get(`${this.baseURL}/weather/fnd`);
-      
-      return mockForecast;
-    } catch (error) {
-      console.error('Error fetching weather forecast:', error);
-      throw new Error('Failed to fetch weather forecast');
-    }
+  async getWeatherForecast(): Promise<WeatherForecast[]> {
+    // 使用 Open-Meteo API 取得香港天氣預報
+    const latitude = 22.3193;
+    const longitude = 114.1694;
+    const timezone = 'Asia/Hong_Kong';
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,rain&timezone=${timezone}&forecast_days=3`;
+    const res = await axios.get(url);
+    const data = res.data;
+    // 取出每天的最高/最低溫、濕度、降雨
+    const days = [0, 24, 48]; // 取三天（每小時資料，假設 24 小時一日）
+    return days.map((start) => {
+      const temps = data.hourly.temperature_2m.slice(start, start + 24);
+      const humidityArr = data.hourly.relative_humidity_2m.slice(start, start + 24);
+      const rainArr = data.hourly.rain.slice(start, start + 24);
+      return {
+        date: data.hourly.time[start],
+        high: Math.max(...temps),
+        low: Math.min(...temps),
+        condition: 'N/A',
+        icon: '🌤️',
+        precipitation: Math.round(rainArr.reduce((a: number, b: number) => a + b, 0)),
+        humidity: Math.round(humidityArr.reduce((a: number, b: number) => a + b, 0) / humidityArr.length),
+        windSpeed: 0,
+      };
+    });
   }
 
   async getWeatherAlerts(): Promise<WeatherAlert[]> {
-    try {
-      // In a real implementation, you would call the HKO API
-      // const response = await axios.get(`${this.baseURL}/weather/warnsum`);
-      
-      return mockAlerts;
-    } catch (error) {
-      console.error('Error fetching weather alerts:', error);
-      throw new Error('Failed to fetch weather alerts');
-    }
+    // Open-Meteo 無警報，回傳空陣列
+    return [];
   }
 
-  async getWeatherData(location: string = 'Hong Kong'): Promise<WeatherAPIResponse> {
-    try {
-      const [current, forecast, alerts] = await Promise.all([
-        this.getCurrentWeather(location),
-        this.getWeatherForecast(location),
-        this.getWeatherAlerts()
-      ]);
-
-      return {
-        current,
-        forecast,
-        alerts
-      };
-    } catch (error) {
-      console.error('Error fetching complete weather data:', error);
-      throw new Error('Failed to fetch weather data');
-    }
-  }
-
-  // Helper method to get typhoon tracking data
-  async getTyphoonData() {
-    try {
-      // In a real implementation, you would call the HKO typhoon API
-      // const response = await axios.get(`${this.baseURL}/weather/tropical-cyclone`);
-      
-      return {
-        activeTyphoons: [],
-        trackingData: []
-      };
-    } catch (error) {
-      console.error('Error fetching typhoon data:', error);
-      throw new Error('Failed to fetch typhoon data');
-    }
-  }
-
-  // Method to get historical weather data
-  async getHistoricalWeather(days: number = 7) {
-    try {
-      // Mock historical data
-      const historicalData = [];
-      for (let i = days; i >= 0; i--) {
-        const date = new Date(Date.now() - i * 86400000);
-        historicalData.push({
-          date: date.toISOString(),
-          temperature: Math.round(25 + Math.random() * 10),
-          humidity: Math.round(60 + Math.random() * 30),
-          windSpeed: Math.round(10 + Math.random() * 15)
-        });
-      }
-      return historicalData;
-    } catch (error) {
-      console.error('Error fetching historical weather data:', error);
-      throw new Error('Failed to fetch historical weather data');
-    }
+  async getWeatherData(): Promise<WeatherAPIResponse> {
+    const [current, forecast, alerts] = await Promise.all([
+      this.getCurrentWeather(),
+      this.getWeatherForecast(),
+      this.getWeatherAlerts(),
+    ]);
+    return { current, forecast, alerts };
   }
 }
 

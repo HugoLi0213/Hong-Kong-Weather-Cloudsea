@@ -114,6 +114,42 @@
   .loading-skeleton {
     @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
   }
+
+  .chartContainer {
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.25);
+    background: #f5f5f5;
+  }
+
+  .footerText {
+    color: #222 !important;
+  }
+
+  .footer a {
+    color: #2563eb !important;
+  }
+
+  select {
+    color: #222 !important;
+    background: #fff !important;
+    border-radius: 8px !important;
+    border: 1px solid #ddd !important;
+    padding: 4px 8px !important;
+    font-size: 16px !important;
+  }
+
+  h1, span {
+    color: #222 !important;
+  }
+
+  body, .min-h-screen, .bg-white {
+    background: #f5f5f5 !important;
+    color: #222 !important;
+  }
 }
 
 /* Custom scrollbar */
