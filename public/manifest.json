@@ -1,0 +1,21 @@
+{
+  "name": "HK Weather & Air Quality Dashboard",
+  "short_name": "HK Weather AQHI",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#dc2626",
+  "theme_color": "#dc2626",
+  "description": "Real-time weather, air quality, and health advice for Hong Kong.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
