@@ -28,7 +28,7 @@ export default function CloudSeaPredictionHKOPage() {
   // 表格渲染
   // Table rendering
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 via-white to-white flex flex-col items-center justify-center p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">18區天氣（香港天文台 API）</h1>
       <div className="mb-2 flex gap-2">
         <button onClick={handleRefresh} className="px-4 py-2 rounded bg-green-500 text-white">刷新天氣</button>
