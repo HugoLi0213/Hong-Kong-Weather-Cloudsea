@@ -4,11 +4,15 @@ import { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import '../chart-dashboard-fix.css';
 
+// 香港天氣和雲海主頁元件
+// Main dashboard component for Hong Kong Weather & Cloudsea
 export default function Dashboard() {
   const [weatherData, setWeatherData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<'HongKong' | 'TaiMoShan'>('HongKong');
 
+  // 取得天氣資料的函數
+  // Function to fetch weather data
   const fetchData = async (loc = location) => {
     setLoading(true);
     const locations = {
@@ -143,6 +147,7 @@ export default function Dashboard() {
   };
 
   // 天氣代碼對照表
+  // Weather code mapping
   const weatherCodeMap: Record<number, string> = {
     0: '晴朗',
     1: '大致天晴',
@@ -175,11 +180,14 @@ export default function Dashboard() {
   };
 
   // 切換地點時只改 state，不 fetch
+  // Change location state without fetching data
   const handleLocationChange = (loc: 'HongKong' | 'TaiMoShan') => {
     setLocation(loc);
     // 不自動 fetch
   };
 
+  // 頁面渲染
+  // Page rendering
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
       <button

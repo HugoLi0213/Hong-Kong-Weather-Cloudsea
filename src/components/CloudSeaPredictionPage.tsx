@@ -68,24 +68,27 @@ function predictCloudSea(data: WeatherData): CloudSeaPrediction {
   };
 }
 
-// 逆溫層預設值：沒有逆溫層
-const defaultData: WeatherData = {
-  humidity: 98,
-  windSpeed: 15,
-  windDirection: 'SE',
-  temperatureDewPointDiff: 2,
-  hasInversionLayer: false, // 預設為沒有逆溫層
-  inversionLayerHeight: 560,
-  observationHeight: 800,
-};
-
-const windOptions = ['E', 'SE', 'NE', 'S', 'N', 'W', 'SW', 'NW'];
-const locations = {
-  HongKong: { label: '香港', latitude: 22.3193, longitude: 114.1694 },
-  TaiMoShan: { label: '大帽山', latitude: 22.411811, longitude: 114.123144 },
-};
-
+// 雲海預測頁元件
+// Cloudsea prediction page component
 export default function CloudSeaPredictionPage() {
+  // 預設天氣資料
+  // Default weather data
+  const defaultData: WeatherData = {
+    humidity: 98,
+    windSpeed: 15,
+    windDirection: 'SE',
+    temperatureDewPointDiff: 2,
+    hasInversionLayer: false, // 預設為沒有逆溫層
+    inversionLayerHeight: 560,
+    observationHeight: 800,
+  };
+
+  const windOptions = ['E', 'SE', 'NE', 'S', 'N', 'W', 'SW', 'NW'];
+  const locations = {
+    HongKong: { label: '香港', latitude: 22.3193, longitude: 114.1694 },
+    TaiMoShan: { label: '大帽山', latitude: 22.411811, longitude: 114.123144 },
+  };
+
   const [form, setForm] = useState<WeatherData>(defaultData);
   const [result, setResult] = useState<CloudSeaPrediction | null>(predictCloudSea(defaultData));
   const [loading, setLoading] = useState(false);
@@ -142,6 +145,8 @@ export default function CloudSeaPredictionPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+      {/* 逆溫層說明彈窗 */}
+      {/* Inversion layer info modal */}
       <button
         className="mb-4 px-4 py-2 rounded-full bg-blue-100 border border-blue-400 text-blue-700 font-semibold shadow hover:bg-blue-200 transition-all"
         onClick={() => setShowInversionInfo(true)}
@@ -197,6 +202,8 @@ export default function CloudSeaPredictionPage() {
           已自動填入{locations[selectedLocation].label}最新天氣（{lastUpdate ? lastUpdate.toLocaleString() : '無時間資料'}），可直接預測或手動微調
         </div>
       )}
+      {/* 表單與結果渲染 */}
+      {/* Form and result rendering */}
       <form onSubmit={handleSubmit} className="bg-gray-100 rounded-lg shadow p-4 w-full max-w-md mb-4">
         <div className="mb-2">
           <label className="block mb-1">濕度 (%)</label>

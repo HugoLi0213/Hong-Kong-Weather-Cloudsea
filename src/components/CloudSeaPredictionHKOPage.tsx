@@ -1,12 +1,16 @@
 import { useMemo, useState } from 'react';
 import { HKOWeatherService } from '../services/HKOWeatherService';
 
+// 香港天文台 18區天氣頁元件
+// HKO 18-district weather page component
 export default function CloudSeaPredictionHKOPage() {
   const [loading, setLoading] = useState(false);
   const [weatherMap, setWeatherMap] = useState<Record<string, any> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const service = useMemo(() => new HKOWeatherService(), []);
 
+  // 取得天氣資料
+  // Fetch weather data
   const handleRefresh = async () => {
     setLoading(true);
     setError(null);
@@ -21,6 +25,8 @@ export default function CloudSeaPredictionHKOPage() {
     }
   };
 
+  // 表格渲染
+  // Table rendering
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">18區天氣（香港天文台 API）</h1>

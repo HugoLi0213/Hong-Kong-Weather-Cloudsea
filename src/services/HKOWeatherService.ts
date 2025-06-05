@@ -1,4 +1,5 @@
 // 香港天文台 API 整合服務
+// HKO Open Data API integration service
 export interface HKOWeatherData {
   temperature: number;
   humidity: number;
@@ -13,6 +14,8 @@ export class HKOWeatherService {
   private readonly baseUrl = 'https://data.weather.gov.hk/weatherAPI/opendata';
 
   async getCurrentWeatherReport(): Promise<any> {
+    // 取得天氣現況
+    // Fetch current weather report
     const response = await fetch(
       `${this.baseUrl}/weather.php?dataType=rhrread&lang=tc`
     );
@@ -21,6 +24,8 @@ export class HKOWeatherService {
   }
 
   async getVisibilityData(): Promise<any> {
+    // 取得能見度資料
+    // Fetch visibility data
     const response = await fetch(
       `${this.baseUrl}/opendata.php?dataType=LTMV&lang=tc&rformat=json`
     );
@@ -29,6 +34,8 @@ export class HKOWeatherService {
   }
 
   async getWeatherWarnings(): Promise<any> {
+    // 取得天氣警告
+    // Fetch weather warnings
     const response = await fetch(
       `${this.baseUrl}/weather.php?dataType=warnsum&lang=tc`
     );
@@ -37,6 +44,8 @@ export class HKOWeatherService {
   }
 
   async processWeatherDataForCloudSea(): Promise<any> {
+    // 處理雲海預測用天氣資料
+    // Process weather data for cloudsea prediction
     try {
       const [currentWeather, visibility, warnings] = await Promise.all([
         this.getCurrentWeatherReport(),
@@ -83,7 +92,8 @@ export class HKOWeatherService {
   }
 
   private extractLocationData(weatherData: any, location: string) {
-    // 依據地點名稱提取數據
+    // 提取指定地點天氣資料
+    // Extract weather data for a specific location
     const tempData = weatherData.temperature?.data?.find((d: any) =>
       d.place === location
     );
@@ -118,26 +128,36 @@ export class HKOWeatherService {
   }
 
   private extractVisibility(visibilityData: any): number {
+    // 提取能見度
+    // Extract visibility
     return visibilityData?.data?.[0]?.value || 10000;
   }
 
   private checkFogAlert(warnings: any): boolean {
+    // 檢查濃霧警告
+    // Check fog alert
     return warnings?.WFIRE?.some((warning: any) =>
       warning.name?.includes('濃霧') || warning.name?.includes('fog')
     ) || false;
   }
 
   private detectInversionFromVisibility(visibility: number): boolean {
+    // 根據能見度判斷逆溫層
+    // Detect inversion layer from visibility
     return visibility < 1000;
   }
 
   private estimateInversionHeight(visibility: number, humidity: number): number {
+    // 根據能見度與濕度估算逆溫層高度
+    // Estimate inversion layer height from visibility and humidity
     if (visibility < 1000 && humidity > 95) return 300;
     if (visibility < 2000 && humidity > 90) return 600;
     return 1000;
   }
 
   private calculateDewPoint(temperature: number, humidity: number): number {
+    // 計算露點
+    // Calculate dew point
     const a = 17.27;
     const b = 237.7;
     const alpha = ((a * temperature) / (b + temperature)) + Math.log(humidity / 100);
@@ -146,6 +166,8 @@ export class HKOWeatherService {
 
 
   private getLocationHeight(location: string): number {
+    // 取得地點高度
+    // Get location height
     const heights: Record<string, number> = {
       '荃灣': 30,
       '大帽山': 957,
