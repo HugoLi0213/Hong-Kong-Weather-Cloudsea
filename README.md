@@ -65,6 +65,7 @@ This is a modern, ad-free weather and cloudsea forecast site for Hong Kong, inte
 - 本專案為 React + Tailwind CSS 開發。
 - 可自由 clone 與自架，僅供個人與學術用途。
 - This project is built with React + Tailwind CSS. You can clone and self-host for personal/academic use.
+- MIT License
 
 ---
 
